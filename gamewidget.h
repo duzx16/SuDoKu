@@ -14,6 +14,9 @@ class QTimer;
 class QButtonGroup;
 class QUndoCommand;
 class QToolBar;
+class QLCDNumber;
+class QGridLayout;
+class QHBoxLayout;
 QT_END_NAMESPACE
 
 class AddNumberCommand:public QUndoCommand
@@ -44,7 +47,7 @@ class GameWidget : public QWidget
     Q_OBJECT
 public:
     explicit GameWidget(QWidget *parent = 0);
-    void setBlocks(int **matrix);
+    void initBlocks(QVector<QVector<int>> data);
 
 signals:
 
@@ -55,10 +58,22 @@ public slots:
     void setBlockHighLight();
     void setMarked(bool marked);
     void updateMarkAction();
+    void addASecond();
+    void pauseTimer();
+    void restartGame();
+
 
 private:
+    //初始化界面的函数
     void createAction();
     void createButtonBar();
+    void createBlocks(QGridLayout *block_layout);
+    void createNumberButtons(QHBoxLayout *numberLayout);
+
+    //用于计时的函数
+    void startTimer();
+    void updateLCDTime();
+
     //每次对数字进行更改时应该调用这个函数
     void checkAnswer();
 
@@ -66,6 +81,11 @@ private:
     QButtonGroup *blocks;
     QButtonGroup *numberButtons;
     QTimer *timer;
+    QLCDNumber *lcd_time;
+
+    int seconds;
+
+    QVector<QVector<int>> init_data;
 
 
 

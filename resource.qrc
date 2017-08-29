@@ -4,5 +4,7 @@
         <file alias="redo">image/redo.png</file>
         <file alias="delete">image/delete.png</file>
         <file alias="mark">image/mark.png</file>
+        <file alias="pause">image/pause.png</file>
+        <file alias="restart">image/restart.png</file>
     </qresource>
 </RCC>

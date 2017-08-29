@@ -42,26 +42,38 @@ QList<int> Block::allNumbers()
 
 void Block::setHighLight(bool high_light)
 {
-    highlight=high_light;
-    updateStyle();
+    if(high_light!=highlight)
+    {
+        highlight=high_light;
+        updateStyle();
+    }
 }
 
 void Block::setMarked(bool isMarked)
 {
-    marked=isMarked;
-    updateStyle();
+    if(isMarked!=marked)
+    {
+        marked=isMarked;
+        updateStyle();
+    }
 }
 
 void Block::setWrong(bool isWrong)
 {
-    wrong=isWrong;
-    updateStyle();
+    if(isWrong!=wrong)
+    {
+        wrong=isWrong;
+        updateStyle();
+    }
 }
 
 void Block::setFixed(bool isFixed)
 {
-    fixed=isFixed;
-    updateStyle();
+    if(isFixed!=fixed)
+    {
+        fixed=isFixed;
+        updateStyle();
+    }
 }
 
 void Block::updateText()
@@ -101,8 +113,8 @@ void Block::updateStyle()
     }
     else if(wrong)
     {
-        normal.append("color:red;");
-        hover.append("color:red;");
+        normal.append("color:#F01B2D;");
+        hover.append("color:#F01B2D;");
     }
     setStyleSheet(style.arg(normal).arg(hover).arg(press));
 }
