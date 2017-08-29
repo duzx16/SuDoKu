@@ -95,12 +95,12 @@ void Block::updateStyle()
     //用stylesheet来设置不同情况的方格的格式
     QString style="QPushButton{%1} QPushButton:hover{%2} QPushButton:checked{%3}",normal="border:0px;font-weight:bold;",hover="background-color:#FFFEA0;",press="background-color:#BA874C;";
 
-    if(marked)
+    /*if(marked)
     {
         normal.append("background-color:#8F1D78;");
         press="background-color:#7A023C;";
     }
-    else if(highlight)
+    else */if(highlight)
     {
         normal.append("background-color:#E9AE6A;");
     }
@@ -119,6 +119,22 @@ void Block::updateStyle()
         //hover.append("color:#F01B2D;");
     }
     setStyleSheet(style.arg(normal).arg(hover).arg(press));
+}
+
+void Block::paintEvent(QPaintEvent *event)
+{
+
+    QPushButton::paintEvent(event);
+    QPainter p(this);
+    if(marked)
+    {
+        p.setPen(Qt::red);
+        p.setBrush(Qt::red);
+        p.drawEllipse(1,1,10,10);
+    }
+    /*QSize size=event->rect().size();
+    p.setPen(Qt::blue);
+    p.drawLine(0,0,size.width(),0);*/
 }
 
 

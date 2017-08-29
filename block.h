@@ -31,7 +31,8 @@ public:
     void updateText();
     //更新按钮的样式，对显示格式更改后应该调用这个函数
     void updateStyle();
-
+protected:
+    void paintEvent(QPaintEvent *event);
 private:
     QSet<int> numbers;
 
