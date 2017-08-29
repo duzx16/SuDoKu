@@ -31,3 +31,6 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     gamewidget.h \
     block.h
+
+RESOURCES += \
+    resource.qrc

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file alias="undo">image/undo.png</file>
+        <file alias="redo">image/redo.png</file>
+        <file alias="delete">image/delete.png</file>
+        <file alias="mark">image/mark.png</file>
+    </qresource>
+</RCC>
