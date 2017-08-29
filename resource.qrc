@@ -1,10 +1,10 @@
 <RCC>
     <qresource prefix="/icon">
-        <file alias="undo">image/undo.png</file>
-        <file alias="redo">image/redo.png</file>
-        <file alias="delete">image/delete.png</file>
-        <file alias="mark">image/mark.png</file>
         <file alias="pause">image/pause.png</file>
         <file alias="restart">image/restart.png</file>
+        <file alias="undo">image/undo_new.png</file>
+        <file alias="redo">image/redo_new.png</file>
+        <file alias="remove">image/remove.png</file>
+        <file alias="mark">image/mark_new.png</file>
     </qresource>
 </RCC>

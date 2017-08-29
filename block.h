@@ -9,26 +9,32 @@ class Block:public QPushButton
 public:
     Block(QWidget *parent=0);
 
+    //增删数字的接口
     void addNumber(int n);
     void deleteNumber(int n);
     void deleteNumbers();
-    bool existNumber(int n);
-    bool isFixed(){return fixed;}
-    bool isMarked(){return marked;}
+
+    //得到关于当前数字的信息的接口
+    bool containNumber(int n);
     QList<int> allNumbers();
 
-    void setHighLight(bool);//用背景不同表示
-    void setMarked(bool);//用下划线表示
-    void setWrong(bool);//用红色字体表示
-    void setFixed(bool);//用黑色字体表示
+    bool isFixed(){return fixed;}
+    bool isMarked(){return marked;}
 
-    //对数字更改后应该调用这个函数
+
+    void setHighLight(bool);//用背景颜色表示
+    void setMarked(bool);//用背景颜色表示
+    void setWrong(bool);//用红色字体表示
+    void setFixed(bool);//用蓝色字体表示
+
+    //更新按钮的文本，对数字更改后应该调用这个函数
     void updateText();
-    //对显示格式更改后应该调用则个函数
+    //更新按钮的样式，对显示格式更改后应该调用这个函数
     void updateStyle();
 
 private:
     QSet<int> numbers;
+
     bool marked;
     bool wrong;
     bool fixed;

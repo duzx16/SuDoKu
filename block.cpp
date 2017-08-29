@@ -22,6 +22,7 @@ void Block::deleteNumber(int n)
     {
         numbers.erase(it);
     }
+    updateText();
 }
 
 void Block::deleteNumbers()
@@ -30,7 +31,7 @@ void Block::deleteNumbers()
     updateText();
 }
 
-bool Block::existNumber(int n)
+bool Block::containNumber(int n)
 {
     return numbers.contains(n);
 }
@@ -91,12 +92,13 @@ void Block::updateText()
 
 void Block::updateStyle()
 {
-    QString style="QPushButton{%1} QPushButton:hover{%2} QPushButton:press{%3}",normal="",hover="background-color:#FFFEA0;",press="background-color:#BA874C;";
+    //用stylesheet来设置不同情况的方格的格式
+    QString style="QPushButton{%1} QPushButton:hover{%2} QPushButton:checked{%3}",normal="border:0px;font-weight:bold;",hover="background-color:#FFFEA0;",press="background-color:#BA874C;";
 
     if(marked)
     {
         normal.append("background-color:#8F1D78;");
-        press="background-color:7A023C;";
+        press="background-color:#7A023C;";
     }
     else if(highlight)
     {
@@ -108,13 +110,13 @@ void Block::updateStyle()
     }
     if(fixed)
     {
-        normal.append("color:blue;");
-        hover.append("color:blue;");
+        normal.append("color:#1DB0B8;");
+        //hover.append("color:blue;");
     }
     else if(wrong)
     {
-        normal.append("color:#F01B2D;");
-        hover.append("color:#F01B2D;");
+        normal.append("color:#EB3F2F;");
+        //hover.append("color:#F01B2D;");
     }
     setStyleSheet(style.arg(normal).arg(hover).arg(press));
 }
