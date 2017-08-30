@@ -36,7 +36,7 @@ GameWidget::GameWidget(QWidget *parent) : QWidget(parent)
 
 }
 
-void GameWidget::initBlocks(QVector<QVector<int> > data)
+void GameWidget::initBlocks(Sudoku_array data)
 {
     //用于将方格初始化
     init_data=data;
@@ -72,6 +72,7 @@ void GameWidget::deleteNumbers()
         {
             undo_stack->push(new DeleteNumbersCommand(aim));
             checkAnswer();
+            setBlockHighLight();
         }
     }
 }
@@ -86,6 +87,7 @@ void GameWidget::addNumber(int n)
         {
             undo_stack->push(new AddNumberCommand(aim,n));
             checkAnswer();
+            setBlockHighLight();
         }
     }
 
@@ -307,7 +309,7 @@ void GameWidget::checkAnswer()
                 {
                     if(k!=i%3||l!=j%3)
                     {
-                        if(checkBlocks(cur_block,dynamic_cast<Block *>(blocks->button(i/3*27+j/3*3+k*3+l))))
+                        if(checkBlocks(cur_block,dynamic_cast<Block *>(blocks->button(i/3*27+j/3*3+k*9+l))))
                         {
                             wrong=true;
                             break;

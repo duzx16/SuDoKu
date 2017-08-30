@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     gamewidget.cpp \
-    block.cpp
+    block.cpp \
+    solver.cpp
 
 HEADERS  += mainwindow.h \
     gamewidget.h \
-    block.h
+    block.h \
+    solver.h
 
 RESOURCES += \
     resource.qrc

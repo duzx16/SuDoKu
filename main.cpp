@@ -1,4 +1,5 @@
 #include "mainwindow.h"
+#include "solver.h"
 #include <QApplication>
 
 int main(int argc, char *argv[])
@@ -9,3 +10,10 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
+/*
+int main()
+{
+    Generator g;
+    g.generate(9);
+}
+*/

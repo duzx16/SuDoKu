@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include "gamewidget.h"
+#include "solver.h"
 #include <QMainWindow>
 
 class MainWindow : public QMainWindow
@@ -13,6 +14,8 @@ public:
     ~MainWindow();
 private:
     GameWidget *game_widget;
+    Generator generator;
+
 };
 
 #endif // MAINWINDOW_H

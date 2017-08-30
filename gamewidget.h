@@ -2,6 +2,7 @@
 #define GAMEWIDGET_H
 
 #include "block.h"
+#include "solver.h"
 #include <QWidget>
 #include <QVector>
 #include <QList>
@@ -49,7 +50,7 @@ public:
     explicit GameWidget(QWidget *parent = 0);
 
     //用于开始游戏的接口
-    void initBlocks(QVector<QVector<int>> data);
+    void initBlocks(Sudoku_array data);
     void startTimer();
 
 signals:
@@ -100,7 +101,7 @@ private:
     int seconds;
 
     //本局游戏的初始状态
-    QVector<QVector<int>> init_data;
+    Sudoku_array init_data;
 
 
     //游戏中的六个按钮
