@@ -72,9 +72,6 @@ void GameWidget::deleteNumbers()
         if(!aim->isFixed())
         {
             undo_stack->push(new DeleteNumbersCommand(aim));
-            checkAnswer();
-            setBlockHighLight();
-            setRACBorder();
         }
     }
 }
@@ -88,9 +85,6 @@ void GameWidget::addNumber(int n)
         if(!aim->isFixed())
         {
             undo_stack->push(new AddNumberCommand(aim,n));
-            checkAnswer();
-            setBlockHighLight();
-            setRACBorder();
         }
     }
 
@@ -154,12 +148,15 @@ void GameWidget::updateMarkAction()
 
 void GameWidget::askHelp()
 {
-    Block *cur_block=dynamic_cast<Block *>(blocks->checkedButton());
-    int cur_id=blocks->checkedId(),row=cur_id/9,column=cur_id%9;
-    if(!cur_block->isFixed())
+    if(blocks->checkedButton())
     {
-        deleteNumbers();
-        addNumber(answer_data[row][column]);
+        Block *cur_block=dynamic_cast<Block *>(blocks->checkedButton());
+        int cur_id=blocks->checkedId(),row=cur_id/9,column=cur_id%9;
+        if(!cur_block->isFixed())
+        {
+            deleteNumbers();
+            addNumber(answer_data[row][column]);
+        }
     }
 }
 
@@ -238,7 +235,9 @@ void GameWidget::createBlocks(QGridLayout *block_layout)
         {
             Block *block=new Block(this);
             block->setMinimumSize(40,40);
-
+            connect(block,SIGNAL(textChanged()),this,SLOT(checkAnswer()));
+            connect(block,SIGNAL(textChanged()),this,SLOT(setBlockHighLight()));
+            connect(block,SIGNAL(textChanged()),this,SLOT(setRACBorder()));
             blocks->addButton(block,9*i+j);
             small_block_layout[(i/3)*3+j/3]->addWidget(block,i%3,j%3);
         }
@@ -358,6 +357,23 @@ void GameWidget::checkAnswer()
             cur_block->setWrong(wrong);
         }
     }
+    checkGameOver();
+}
+
+void GameWidget::checkGameOver()
+{
+    bool over=true;
+    foreach(QAbstractButton *cur_button,blocks->buttons())
+    {
+        Block *cur_block=dynamic_cast<Block *>(cur_button);
+        if(cur_block->isWrong()||!cur_block->single_num())
+        {
+            over=false;
+            break;
+        }
+    }
+    if(over)
+        emit GameOver();
 }
 
 void GameWidget::pauseTimer()

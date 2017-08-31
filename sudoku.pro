@@ -27,12 +27,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     gamewidget.cpp \
     block.cpp \
-    solver.cpp
+    solver.cpp \
+    pages.cpp
 
 HEADERS  += mainwindow.h \
     gamewidget.h \
     block.h \
-    solver.h
+    solver.h \
+    pages.h
 
 RESOURCES += \
     resource.qrc

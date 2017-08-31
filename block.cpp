@@ -12,7 +12,9 @@ Block::Block(QWidget *parent):QPushButton(parent),marked(false),wrong(false),fix
 void Block::addNumber(int n)
 {
     numbers.insert(n);
+    emit textChanged();
     updateText();
+
 }
 
 void Block::deleteNumber(int n)
@@ -22,12 +24,15 @@ void Block::deleteNumber(int n)
     {
         numbers.erase(it);
     }
+    emit textChanged();
     updateText();
+
 }
 
 void Block::deleteNumbers()
 {
     numbers.clear();
+    emit textChanged();
     updateText();
 }
 
@@ -87,12 +92,38 @@ void Block::updateText()
 {
     QStringList nums;
     QList<int> num_list=numbers.toList();
+    QFont f=font();
+    if(num_list.size()<=3)
+    {
+        f.setPointSize(22-2*num_list.size());
+    }
+    else if(num_list.size()<=6)
+    {
+        f.setPointSize(14);
+    }
+    else
+    {
+        f.setPointSize(11);
+    }
+    setFont(f);
     std::sort(num_list.begin(),num_list.end());
     foreach(int num,num_list)
     {
         nums.append(QString::number(num));
+
     }
-    QString text=nums.join(",");
+    QString text=nums.join(" ");
+    int i=0;
+    for(auto it=text.begin();it!=text.end();++it)
+    {
+        if(*it==' ')
+        {
+            i++;
+            if(!(i%3))
+                *it='\n';
+        }
+
+    }
     setText(text);
 }
 

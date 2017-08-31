@@ -55,6 +55,7 @@ public:
     void startTimer();
 
 signals:
+    void GameOver();
 
 public slots:
     //用于向方格中增删数字
@@ -78,6 +79,9 @@ public slots:
 
     void askHelp();
 
+    //检测错误数字，每次对数字进行更改时应该调用这个函数
+    void checkAnswer();
+
 
 private:
     //初始化界面的函数
@@ -90,8 +94,8 @@ private:
     //用于计时的函数
     void updateLCDTime();
 
-    //检测错误数字，每次对数字进行更改时应该调用这个函数
-    void checkAnswer();
+    //检验游戏是否结束，由checkAnswer调用
+    void checkGameOver();
 
     //用于实现撤销
     QUndoStack *undo_stack;

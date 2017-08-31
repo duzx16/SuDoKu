@@ -6,6 +6,7 @@
 
 class Block:public QPushButton
 {
+    Q_OBJECT
 public:
     enum Border{UpBorder=1,RightBorder=2,DownBorder=4,LeftBorder=8,};
     Block(QWidget *parent=0);
@@ -22,6 +23,7 @@ public:
     bool isFixed(){return fixed;}
     bool isMarked(){return marked;}
     bool single_num(){return numbers.size()==1;}
+    bool isWrong(){return wrong;}
 
 
     void setHighLight(bool);//用背景颜色表示
@@ -34,6 +36,8 @@ public:
     void updateText();
     //更新按钮的样式，对显示格式更改后应该调用这个函数
     void updateStyle();
+signals:
+    void textChanged();
 protected:
     void paintEvent(QPaintEvent *event);
 private:
