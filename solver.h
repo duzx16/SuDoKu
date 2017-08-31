@@ -48,6 +48,8 @@ public:
 
     Sudoku_array result();
 
+    Sudoku_array return_answer(){return answer;}
+
 private:
     bool init_pattern(int n);
 
@@ -68,6 +70,8 @@ private:
     int complexity_block[10][2];
 
     std::mt19937 eng;
+
+    Sudoku_array answer;
 
 };
 

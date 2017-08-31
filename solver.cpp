@@ -154,6 +154,8 @@ void Generator::generate_pattern()
         init_pattern(11);
     }
     while(!solve());
+    shuffle_data();
+    answer=data;
 }
 
 bool Generator::init_pattern(int n)
@@ -238,11 +240,8 @@ void Generator::generate(int complexity)
     //cout<<min<<','<<max<<'\n';
     while(!dig_hole(min,max))
     {
-        std::cout<<"Fail\n";
         generate_pattern();
-        std::cout<<"Restart\n";
     }
-    shuffle_data();
     //print_sudoku(data);
     //Sudoku_solver s(data);
     //s.solve();

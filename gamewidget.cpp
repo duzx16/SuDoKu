@@ -36,10 +36,11 @@ GameWidget::GameWidget(QWidget *parent) : QWidget(parent)
 
 }
 
-void GameWidget::initBlocks(Sudoku_array data)
+void GameWidget::initBlocks(const Sudoku_array &data,const Sudoku_array &answer)
 {
     //用于将方格初始化
     init_data=data;
+    answer_data=answer;
     for(int i=0;i<9;++i)
     {
         for(int j=0;j<9;++j)
@@ -151,6 +152,17 @@ void GameWidget::updateMarkAction()
     markAction->setChecked(dynamic_cast<Block *>(blocks->checkedButton())->isMarked());
 }
 
+void GameWidget::askHelp()
+{
+    Block *cur_block=dynamic_cast<Block *>(blocks->checkedButton());
+    int cur_id=blocks->checkedId(),row=cur_id/9,column=cur_id%9;
+    if(!cur_block->isFixed())
+    {
+        deleteNumbers();
+        addNumber(answer_data[row][column]);
+    }
+}
+
 void GameWidget::addASecond()
 {
     seconds+=1;
@@ -190,6 +202,7 @@ void GameWidget::createAction()
     restartAction=new QAction(this);
     restartAction->setIcon(QIcon(":/icon/restart"));
     connect(restartAction,SIGNAL(triggered(bool)),this,SLOT(restartGame()));
+
 }
 
 void GameWidget::createButtonBar()
@@ -360,7 +373,7 @@ void GameWidget::pauseTimer()
 void GameWidget::restartGame()
 {
     //重新开始游戏（即重新载入）
-    initBlocks(init_data);
+    initBlocks(init_data,answer_data);
     startTimer();
 }
 

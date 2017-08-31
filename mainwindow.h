@@ -4,6 +4,7 @@
 #include "gamewidget.h"
 #include "solver.h"
 #include <QMainWindow>
+#include <QMenu>
 
 class MainWindow : public QMainWindow
 {
@@ -15,6 +16,8 @@ public:
 private:
     GameWidget *game_widget;
     Generator generator;
+    QAction *askHelpAction;
+    QMenu *controlMenu;
 
 };
 

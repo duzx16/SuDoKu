@@ -18,6 +18,7 @@ class QToolBar;
 class QLCDNumber;
 class QGridLayout;
 class QHBoxLayout;
+class QMenu;
 QT_END_NAMESPACE
 
 class AddNumberCommand:public QUndoCommand
@@ -50,7 +51,7 @@ public:
     explicit GameWidget(QWidget *parent = 0);
 
     //用于开始游戏的接口
-    void initBlocks(Sudoku_array data);
+    void initBlocks(const Sudoku_array &data,const Sudoku_array &answer);
     void startTimer();
 
 signals:
@@ -75,10 +76,13 @@ public slots:
     //用于更新“标记”按钮的状态
     void updateMarkAction();
 
+    void askHelp();
+
 
 private:
     //初始化界面的函数
     void createAction();
+    void createMenu();
     void createButtonBar();
     void createBlocks(QGridLayout *block_layout);
     void createNumberButtons(QHBoxLayout *numberLayout);
@@ -103,6 +107,7 @@ private:
 
     //本局游戏的初始状态
     Sudoku_array init_data;
+    Sudoku_array answer_data;
 
 
     //游戏中的六个按钮
@@ -113,8 +118,10 @@ private:
     QAction *restartAction;
     QAction *pauseAction;
 
+
     //界面上方的工具栏
     QToolBar *gameBar;
+
 };
 
 #endif // GAMEWIDGET_H
