@@ -73,6 +73,7 @@ void GameWidget::deleteNumbers()
             undo_stack->push(new DeleteNumbersCommand(aim));
             checkAnswer();
             setBlockHighLight();
+            setRACBorder();
         }
     }
 }
@@ -88,6 +89,7 @@ void GameWidget::addNumber(int n)
             undo_stack->push(new AddNumberCommand(aim,n));
             checkAnswer();
             setBlockHighLight();
+            setRACBorder();
         }
     }
 
@@ -112,6 +114,28 @@ void GameWidget::setBlockHighLight()
         dynamic_cast<Block *>(block)->setHighLight(set_high_light);
     }
 
+}
+
+void GameWidget::setRACBorder()
+{
+    int cur_id=blocks->checkedId();
+    Block *cur_block=dynamic_cast<Block *>(blocks->checkedButton());
+    if(cur_id>-1)
+    {
+        int row=cur_id/9,column=cur_id%9;
+        bool set_border=!cur_block->single_num();
+        for(int i=0;i<9;++i)
+        {
+            for(int j=0;j<9;++j)
+            {
+                if((i==row||j==column)&&i*9+j!=cur_id&&set_border)
+                    dynamic_cast<Block *>(blocks->button(9*i+j))->setBorder(Block::UpBorder|Block::RightBorder|Block::DownBorder|Block::LeftBorder);
+                else
+                    dynamic_cast<Block *>(blocks->button(9*i+j))->setBorder(0);
+
+            }
+        }
+    }
 }
 
 void GameWidget::setMarked(bool marked)
@@ -223,6 +247,8 @@ void GameWidget::createBlocks(QGridLayout *block_layout)
     block_layout->setSpacing(1);
 
     connect(blocks,SIGNAL(buttonClicked(int)),this,SLOT(setBlockHighLight()));
+    connect(blocks,SIGNAL(buttonClicked(int)),this,SLOT(setRACBorder()));
+
 
 }
 

@@ -7,6 +7,7 @@
 class Block:public QPushButton
 {
 public:
+    enum Border{UpBorder=1,RightBorder=2,DownBorder=4,LeftBorder=8,};
     Block(QWidget *parent=0);
 
     //增删数字的接口
@@ -20,12 +21,14 @@ public:
 
     bool isFixed(){return fixed;}
     bool isMarked(){return marked;}
+    bool single_num(){return numbers.size()==1;}
 
 
     void setHighLight(bool);//用背景颜色表示
     void setMarked(bool);//用背景颜色表示
     void setWrong(bool);//用红色字体表示
     void setFixed(bool);//用蓝色字体表示
+    void setBorder(int b);
 
     //更新按钮的文本，对数字更改后应该调用这个函数
     void updateText();
@@ -40,6 +43,7 @@ private:
     bool wrong;
     bool fixed;
     bool highlight;
+    int border_type;
 };
 
 #endif // BLOCK_H

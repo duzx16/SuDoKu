@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <QtWidgets>
 
-Block::Block(QWidget *parent):QPushButton(parent),marked(false),wrong(false),fixed(false),highlight(false)
+Block::Block(QWidget *parent):QPushButton(parent),marked(false),wrong(false),fixed(false),highlight(false),border_type(0)
 {
     setCheckable(true);
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -77,6 +77,12 @@ void Block::setFixed(bool isFixed)
     }
 }
 
+void Block::setBorder(int b)
+{
+    border_type=b;
+    update();
+}
+
 void Block::updateText()
 {
     QStringList nums;
@@ -131,6 +137,25 @@ void Block::paintEvent(QPaintEvent *event)
         p.setPen(Qt::red);
         p.setBrush(Qt::red);
         p.drawEllipse(1,1,10,10);
+    }
+    QPen pen(Qt::blue);
+    pen.setWidth(2);
+    p.setPen(pen);
+    if(border_type%2)
+    {
+        p.drawLine(0,0,width(),0);
+    }
+    if(border_type%4/2)
+    {
+        p.drawLine(width(),0,width(),height());
+    }
+    if(border_type%8/4)
+    {
+        p.drawLine(0,height(),width(),height());
+    }
+    if(border_type/8)
+    {
+        p.drawLine(0,0,0,height());
     }
     /*QSize size=event->rect().size();
     p.setPen(Qt::blue);

@@ -62,6 +62,7 @@ public slots:
 
     //用于设置方格的格式
     void setBlockHighLight();
+    void setRACBorder();
     void setMarked(bool marked);
 
     //用于计时的槽函数
