@@ -17,14 +17,20 @@ public:
     ~MainWindow();
 public slots:
     void beginGame();
-    void endGame();
+    void returnBegin();
 private:
+
+    void createActions();
+
     GameWidget *game_widget;
     BeginPage *begin_page;
     ComplexityDialog *complex_dialog;
     QStackedWidget *pages;
     Generator generator;
+
     QAction *askHelpAction;
+    QAction *returnBeginAction;
+
     QMenu *controlMenu;
 
 };

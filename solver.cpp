@@ -1,5 +1,6 @@
 #include <iostream>
 #include  "solver.h"
+#include <memory.h>
 
 using namespace std;
 
@@ -10,6 +11,7 @@ Sudoku_solver::Sudoku_solver(int (*init)[9])
         for (int j = 0; j < 9; ++j)
             data[i][j] = init[i][j];
     }
+    init_mark();
 }
 
 bool Sudoku_solver::check_answer(int row, int column, int answer)
@@ -46,13 +48,20 @@ bool Sudoku_solver::trace_back(int i, int j)
     }
     if (data[i][j] == 0)
     {
+        int k=block_num(i,j);
         for (int answer = 1; answer <= 9; ++answer)
         {
-            if (check_answer(i, j, answer))
+            if (!row[i][answer-1]&&!column[j][answer-1]&&!block[k][answer-1])
             {
                 data[i][j] = answer;
+                row[i][answer-1]=true;
+                column[j][answer-1]=true;
+                block[k][answer-1]=true;
                 trace_back(i, j + 1);
                 data[i][j] = 0;
+                row[i][answer-1]=false;
+                column[j][answer-1]=false;
+                block[k][answer-1]=false;
             }
         }
     } else
@@ -94,9 +103,28 @@ void Sudoku_solver::print_result()
     }
 }
 
+void Sudoku_solver::init_mark()
+{
+    memset(row,0,sizeof(row));
+    memset(column,0,sizeof(column));
+    memset(block,0,sizeof(block));
+    int num;
+    for(int i=0;i<9;++i)
+        for(int j=0;j<9;++j)
+        {
+            num=data[i][j];
+            if(num)
+            {
+                row[i][num-1]=true;
+                column[j][num-1]=true;
+                block[block_num(i,j)][num-1]=true;
+            }
+        }
+}
+
 Sudoku_solver::Sudoku_solver(Sudoku_array aim):data(aim)
 {
-
+    init_mark();
 }
 
 Sudoku_solver::Sudoku_solver()
@@ -108,6 +136,7 @@ Sudoku_solver::Sudoku_solver()
             data[i][j]=0;
         }
     }
+    init_mark();
 }
 
 Solvable_judge::Solvable_judge()
@@ -129,16 +158,23 @@ bool Solvable_judge::trace_back(int i, int j)
     }
     if (data[i][j] == 0)
     {
+        int k=block_num(i,j);
         for (int answer = 1; answer <= 9; ++answer)
         {
-            if (check_answer(i, j, answer))
+            if (!row[i][answer-1]&&!column[j][answer-1]&&!block[k][answer-1])
             {
                 data[i][j] = answer;
+                row[i][answer-1]=true;
+                column[j][answer-1]=true;
+                block[k][answer-1]=true;
                 if(trace_back(i, j + 1))
                     return true;
+                data[i][j] = 0;
+                row[i][answer-1]=false;
+                column[j][answer-1]=false;
+                block[k][answer-1]=false;
             }
         }
-        data[i][j] = 0;
     } else
     {
         return trace_back(i, j + 1);
@@ -152,6 +188,7 @@ void Generator::generate_pattern()
     {
         init_data();
         init_pattern(11);
+        init_mark();
     }
     while(!solve());
     shuffle_data();

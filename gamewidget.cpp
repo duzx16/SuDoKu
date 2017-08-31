@@ -373,7 +373,13 @@ void GameWidget::checkGameOver()
         }
     }
     if(over)
+    {
+        QMessageBox dialog;
+        dialog.setWindowTitle("恭喜");
+        dialog.setText("您已获胜！");
+        dialog.exec();
         emit GameOver();
+    }
 }
 
 void GameWidget::pauseTimer()

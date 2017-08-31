@@ -16,7 +16,11 @@ public:
     void print_result();
     bool one_sol(){return solutions.size()==1;}
 protected:
-    bool check_answer(int row, int column, int answer);
+    void init_mark();
+
+    int block_num(int i,int j){return i/3*3+j/3;}
+
+    bool check_answer(int row,int column,int answer);
 
     virtual bool trace_back(int i, int j);
 
@@ -24,6 +28,10 @@ protected:
 
     Sudoku_array data;
     std::vector<Sudoku_array> solutions;
+
+    bool row[9][9];
+    bool column[9][9];
+    bool block[9][9];
 
 };
 
