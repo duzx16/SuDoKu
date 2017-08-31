@@ -18,6 +18,9 @@ public:
 public slots:
     void beginGame();
     void returnBegin();
+    void showGame();
+    void saveGame();
+    void loadGame();
 private:
 
     void createActions();
@@ -30,6 +33,8 @@ private:
 
     QAction *askHelpAction;
     QAction *returnBeginAction;
+    QAction *saveGameAction;
+    QAction *loadGameAction;
 
     QMenu *controlMenu;
 

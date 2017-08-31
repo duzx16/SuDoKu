@@ -1,4 +1,5 @@
 #include "gamewidget.h"
+#include <QSound>
 #include <QtWidgets>
 
 GameWidget::GameWidget(QWidget *parent) : QWidget(parent)
@@ -238,6 +239,7 @@ void GameWidget::createBlocks(QGridLayout *block_layout)
             connect(block,SIGNAL(textChanged()),this,SLOT(checkAnswer()));
             connect(block,SIGNAL(textChanged()),this,SLOT(setBlockHighLight()));
             connect(block,SIGNAL(textChanged()),this,SLOT(setRACBorder()));
+            connect(block,SIGNAL(clicked(bool)),this,SLOT(blockSound()));
             blocks->addButton(block,9*i+j);
             small_block_layout[(i/3)*3+j/3]->addWidget(block,i%3,j%3);
         }
@@ -276,6 +278,7 @@ void GameWidget::createNumberButtons(QHBoxLayout *numberLayout)
         button->setMinimumSize(40,40);
         button->setStyleSheet("QPushButton{background-color:#F3D7B5;border:0px;font-weight:bold;color:#2E68AA;} QPushButton:hover{background-color:#EFCEE8;} QPushButton:pressed{background-color:#C7B3E5}");
         connect(button,SIGNAL(clicked(bool)),m,SLOT(map()));
+        connect(button,SIGNAL(clicked(bool)),this,SLOT(numberSound()));
         m->setMapping(button,i+1);
         button->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         numberButtons->addButton(button,i+1);
@@ -288,6 +291,74 @@ void GameWidget::startTimer()
 {
     //（重新）开始计时
     seconds=0;
+    updateLCDTime();
+    timer->start(1000);
+}
+
+void GameWidget::saveGame(QTextStream &in)
+{
+    //用于保存游戏
+    in<<seconds<<'\n';
+    for(int i=0;i<9;++i)
+    {
+        for(int j=0;j<9;++j)
+            in<<init_data[i][j]<<'\t';
+        in<<'\n';
+    }
+    for(int i=0;i<9;++i)
+    {
+        for(int j=0;j<9;++j)
+            in<<answer_data[i][j]<<'\t';
+        in<<'\n';
+    }
+    for(int i=0;i<9;++i)
+    {
+        for(int j=0;j<9;++j)
+        {
+            Block *cur=dynamic_cast<Block *>(blocks->button(9*i+j));
+            if(!cur->isFixed()&&!cur->isEmpty())
+            {
+                in<<9*i+j<<'\t';
+                auto nums=cur->allNumbers();
+                foreach(int num,nums)
+                    in<<num<<'\t';
+                in<<'\n';
+            }
+        }
+    }
+
+}
+
+void GameWidget::loadGame(QTextStream &out)
+{
+    //用于加载游戏
+    out>>seconds;
+    for(int i=0;i<9;++i)
+    {
+        for(int j=0;j<9;++j)
+            out>>init_data[i][j];
+    }
+    for(int i=0;i<9;++i)
+    {
+        for(int j=0;j<9;++j)
+            out>>answer_data[i][j];
+    }
+    initBlocks(init_data,answer_data);
+    out.readLine();
+    while(!out.atEnd())
+    {
+        QString line=out.readLine();
+        QTextStream line_in(&line);
+        int id,num;
+        line_in>>id;
+        Block *cur=dynamic_cast<Block *>(blocks->button(id));
+        while(!line_in.atEnd())
+        {
+            line_in>>num;
+            if(num)
+                cur->addNumber(num);
+        }
+    }
     updateLCDTime();
     timer->start(1000);
 }
@@ -358,6 +429,16 @@ void GameWidget::checkAnswer()
         }
     }
     checkGameOver();
+}
+
+void GameWidget::blockSound()
+{
+    QSound::play(":/sound/block");
+}
+
+void GameWidget::numberSound()
+{
+    QSound::play(":/sound/number");
 }
 
 void GameWidget::checkGameOver()

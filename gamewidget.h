@@ -19,6 +19,7 @@ class QLCDNumber;
 class QGridLayout;
 class QHBoxLayout;
 class QMenu;
+class QTextStream;
 QT_END_NAMESPACE
 
 class AddNumberCommand:public QUndoCommand
@@ -54,6 +55,9 @@ public:
     void initBlocks(const Sudoku_array &data,const Sudoku_array &answer);
     void startTimer();
 
+    void saveGame(QTextStream &in);
+    void loadGame(QTextStream &out);
+
 signals:
     void GameOver();
 
@@ -81,6 +85,10 @@ public slots:
 
     //检测错误数字，每次对数字进行更改时应该调用这个函数
     void checkAnswer();
+
+    //音效
+    void blockSound();
+    void numberSound();
 
 
 private:

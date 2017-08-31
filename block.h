@@ -24,6 +24,7 @@ public:
     bool isMarked(){return marked;}
     bool single_num(){return numbers.size()==1;}
     bool isWrong(){return wrong;}
+    bool isEmpty(){return numbers.empty();}
 
 
     void setHighLight(bool);//用背景颜色表示

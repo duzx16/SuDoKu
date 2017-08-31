@@ -39,6 +39,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::beginGame()
 {
+    //开始一局新游戏
     srand(time(NULL));
     generator.generate(complex_dialog->value());
     game_widget->initBlocks(generator.result(),generator.return_answer());
@@ -48,7 +49,53 @@ void MainWindow::beginGame()
 
 void MainWindow::returnBegin()
 {
+    //回到开始菜单
     pages->setCurrentIndex(0);
+}
+
+void MainWindow::showGame()
+{
+    //显示新游戏
+    pages->setCurrentIndex(1);
+}
+
+void MainWindow::saveGame()
+{
+    //选择路径并保存游戏
+    QString path = QFileDialog::getSaveFileName(this,tr("打开文件"),".");
+
+    if(!path.isEmpty()) {
+        QFile file(path);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QMessageBox::warning(this, tr("写入文件"),tr("无法打开文件:\n%1").arg(path));
+            return;
+        }
+        QTextStream in(&file);
+        game_widget->saveGame(in);
+        file.close();
+    } else {
+        QMessageBox::warning(this, tr("路径"),tr("你没有选择任何文件"));
+    }
+}
+
+void MainWindow::loadGame()
+{
+    //选择存档并载入
+    QString path = QFileDialog::getOpenFileName(this,tr("打开文件"),".");
+
+    if(!path.isEmpty()) {
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+            QMessageBox::warning(this, tr("读入文件"),tr("无法打开文件:\n%1").arg(path));
+            return;
+        }
+        QTextStream in(&file);
+        game_widget->loadGame(in);
+        file.close();
+        showGame();
+    } else {
+        QMessageBox::warning(this, tr("路径"),tr("你没有选择任何文件"));
+    }
 }
 
 void MainWindow::createActions()
@@ -61,7 +108,17 @@ void MainWindow::createActions()
     returnBeginAction=new QAction("回到主界面",this);
     connect(returnBeginAction,SIGNAL(triggered(bool)),this,SLOT(returnBegin()));
 
+    //添加“保存”动作
+    saveGameAction=new QAction("保存当前游戏",this);
+    connect(saveGameAction,SIGNAL(triggered(bool)),this,SLOT(saveGame()));
+
+    //添加“载入”动作
+    loadGameAction=new QAction("载入游戏",this);
+    connect(loadGameAction,SIGNAL(triggered(bool)),this,SLOT(loadGame()));
+
     controlMenu=menuBar()->addMenu("控制");
-    controlMenu->addAction(returnBeginAction);
     controlMenu->addAction(askHelpAction);
+    controlMenu->addAction(returnBeginAction);
+    controlMenu->addAction(saveGameAction);
+    controlMenu->addAction(loadGameAction);
 }
