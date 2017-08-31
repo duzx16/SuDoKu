@@ -12,13 +12,13 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
-
-/*int main()
+/*
+int main()
 {
     Generator g;
-    g.generate(9);
-}*/
-
+    g.generate(0);
+}
+*/
 /*int main()
 {
     int data[][9]={

@@ -217,11 +217,13 @@ bool Generator::init_pattern(int n)
     return true;
 }
 
-Generator::Generator():Solvable_judge(),eng(time(NULL))
+Generator::Generator():Solvable_judge(),eng(time(NULL)),lower_bound{5,0,4,0,3,0,2,0,1,0}
 {
     for(int i=0;i<10;++i)
         for(int j=0;j<2;++j)
-            complexity_block[i][j]=i*3+j+27;
+            complexity_block[i][j]=i*3+j*2+27;
+    ;
+
 }
 
 void Generator::init_data()
@@ -233,7 +235,7 @@ void Generator::init_data()
         }
 }
 
-bool Generator::dig_hole(int min, int max)
+bool Generator::dig_hole(int min, int max,int bound)
 {
     array<int,81> dig_step;
     for(int i=0;i<9;++i)
@@ -254,14 +256,18 @@ bool Generator::dig_hole(int min, int max)
                 return i>=min-1&&i<=max-1;
             }
             int row=dig_step[cur]/9,column=dig_step[cur]%9,value=data[row][column];
-            data[row][column]=0;
-            Sudoku_solver s(data);
-            s.solve();
             cur++;
-            if(s.one_sol())
+            data[row][column]=0;
+            if(check_lower_bound(row,column,bound))
             {
-                data[row][column]=0;
-                break;
+                Sudoku_solver s(data);
+                s.solve();
+
+                if(s.one_sol())
+                {
+                    data[row][column]=0;
+                    break;
+                }
             }
             data[row][column]=value;
         }
@@ -270,12 +276,35 @@ bool Generator::dig_hole(int min, int max)
     return true;
 }
 
+bool Generator::check_lower_bound(int row, int col, int bound)
+{
+    if(bound==0)
+        return true;
+    int c_num=0,r_num=0;
+    for(int i=0;i<9;++i)
+    {
+        if(data[row][i])
+            ++c_num;
+        if(data[i][col])
+            ++r_num;
+    }
+    if(c_num<bound||r_num<bound)
+        return false;
+    int b_row=row/3,b_col=col/3;
+    c_num=0;
+    for(int i=0;i<3;++i)
+        for(int j=0;j<3;++j)
+            if(data[b_row*3+i][b_col*3+j])
+                ++c_num;
+    return c_num>=bound;
+}
+
 void Generator::generate(int complexity)
 {
     generate_pattern();
-    int min=complexity_block[complexity][0],max=complexity_block[complexity][1];
+    int min=complexity_block[complexity][0],max=complexity_block[complexity][1],bound=lower_bound[complexity];
     //cout<<min<<','<<max<<'\n';
-    while(!dig_hole(min,max))
+    while(!dig_hole(min,max,bound))
     {
         generate_pattern();
     }

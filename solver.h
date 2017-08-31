@@ -65,7 +65,9 @@ private:
 
     void generate_pattern();
 
-    bool dig_hole(int min, int max);
+    bool dig_hole(int min, int max,int bound);
+
+    bool check_lower_bound(int row,int col,int bound);
 
     void shuffle_data();
 
@@ -76,6 +78,8 @@ private:
     void swap_row(int r1, int r2);
 
     int complexity_block[10][2];
+
+    int lower_bound[10];
 
     std::mt19937 eng;
 
