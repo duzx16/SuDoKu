@@ -165,8 +165,8 @@ void Block::paintEvent(QPaintEvent *event)
     QPainter p(this);
     if(marked)
     {
-        p.setPen(Qt::red);
-        p.setBrush(Qt::red);
+        p.setPen(QColor(255,0,0,0));
+        p.setBrush(QColor(255,0,0,100));
         p.drawEllipse(1,1,10,10);
     }
     QPen pen(Qt::blue);
